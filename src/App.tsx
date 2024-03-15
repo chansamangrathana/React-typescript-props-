@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { Button } from "flowbite-react";
+import { Button, Modal } from "flowbite-react";
 import CardComponent from "./componenet/CardComponent";
+import FormCreateProduct from "./componenet/FormCreateProduct";
 
 type Status = "idle" | "loading" | "success" | "error";
 type Product = {
@@ -15,6 +16,7 @@ type Product = {
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
   const [status, setStatus] = useState<Status>("idle");
+  const [openModal, setOpenModal] = useState(false);
   useEffect(() => {
     setStatus("loading");
     fetch("https://fakestoreapi.com/products")
@@ -27,10 +29,19 @@ function App() {
         setStatus("error");
       });
   }, []);
-
+  if (status === "loading") {
+    return (
+      <div className="h-screen grid place-content-center">
+        <h1 className="text-6xl"> Loading</h1>
+      </div>
+    );
+  }
   return (
     <>
-      
+      <div className="flex justify-center">
+        <Button onClick={() => setOpenModal(true)}>Create Product</Button>
+      </div>
+
       <div className=" mx-16 grid grid-flow-row grid-cols-4 gap-4">
         {products.map((product) => (
           <CardComponent
@@ -41,6 +52,23 @@ function App() {
           />
         ))}
       </div>
+      
+      {/* modal */}
+      <Modal show={openModal} onClose={() => setOpenModal(false)}>
+        <Modal.Header>Create Product</Modal.Header>
+        <Modal.Body>
+          <div className="space-y-6">
+          <FormCreateProduct/>
+
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={() => setOpenModal(false)}>Create</Button>
+          <Button color="gray" onClick={() => setOpenModal(false)}>
+            Clear
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
