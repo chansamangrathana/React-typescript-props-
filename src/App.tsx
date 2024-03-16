@@ -36,6 +36,9 @@ function App() {
       </div>
     );
   }
+  function getDataForm(product:any){
+    console.log(product)
+  }
   return (
     <>
       <div className="flex justify-center">
@@ -58,8 +61,8 @@ function App() {
         <Modal.Header>Create Product</Modal.Header>
         <Modal.Body>
           <div className="space-y-6">
-          <FormCreateProduct/>
-
+          <FormCreateProduct getDataForm ={getDataForm}/>
+          
           </div>
         </Modal.Body>
         <Modal.Footer>
